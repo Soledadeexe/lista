@@ -306,18 +306,32 @@ function initFirebase(config, roomId) {
   }
 }
 
+// Configuração padrão do Firebase gerada para o projeto ListaCompras
+const DEFAULT_FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBKJg7bA06TLacsWZaXOLbAdx91iLLWoDo",
+  authDomain: "listacompras-fc673.firebaseapp.com",
+  projectId: "listacompras-fc673",
+  databaseURL: "https://listacompras-fc673-default-rtdb.firebaseio.com",
+  storageBucket: "listacompras-fc673.firebasestorage.app",
+  messagingSenderId: "975454855992",
+  appId: "1:975454855992:web:ccb02aacd0d99304c5d7cd",
+  measurementId: "G-HNDF97ZRZT"
+};
+
 function initFirebaseFromStorage() {
   const savedConfig = localStorage.getItem('mercado_firebase_config');
   const savedRoom = localStorage.getItem('mercado_firebase_room') || state.roomId;
-  if (savedConfig) {
-    try {
-      const parsedConfig = JSON.parse(savedConfig);
-      document.getElementById('txtFirebaseConfig').value = JSON.stringify(parsedConfig, null, 2);
-      document.getElementById('inputRoomId').value = savedRoom;
-      initFirebase(parsedConfig, savedRoom);
-    } catch (e) {
-      console.warn('Configuração salva do Firebase inválida:', e);
-    }
+  
+  try {
+    const configToUse = savedConfig ? JSON.parse(savedConfig) : DEFAULT_FIREBASE_CONFIG;
+    const txtField = document.getElementById('txtFirebaseConfig');
+    if (txtField) txtField.value = JSON.stringify(configToUse, null, 2);
+    const roomField = document.getElementById('inputRoomId');
+    if (roomField) roomField.value = savedRoom;
+
+    initFirebase(configToUse, savedRoom);
+  } catch (e) {
+    console.warn('Erro ao inicializar Firebase padrão:', e);
   }
 }
 
