@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lista de Compras Inteligente - Supermercado</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="./style.css">
+
+  <!-- Firebase Compat CDN (para sincronização em tempo real grátis) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-main">
+        <div class="brand">
+          <span class="brand-icon">🛒</span>
+          <div>
+            <h1>Lista do Mercado</h1>
+            <p class="brand-subtitle">Tempo real & divisão de despesas</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- Aumentar Texto para Leitura Fácil -->
+          <button id="btnFontToggle" class="btn-font-toggle" title="Aumentar/Diminuir tamanho do texto">
+            <span>A+</span>
+          </button>
+
+          <!-- Status de Sincronização -->
+          <button id="btnSyncStatus" class="status-badge local" title="Clique para configurar sincronização entre 2 pessoas">
+            <span class="status-dot"></span>
+            <span id="syncStatusText">Modo Local</span>
+          </button>
+          
+          <!-- Botão Compartilhar -->
+          <button id="btnShare" class="btn-icon" title="Compartilhar lista com parceiro(a)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </button>
+
+          <!-- Botão Configurações -->
+          <button id="btnSettings" class="btn-icon" title="Configurações dos usuários e sincronização">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Resumo Financeiro / Painel de Divisão -->
+      <section class="financial-summary-card">
+        <div class="summary-top">
+          <div class="total-block">
+            <span class="total-label">Total da Compra</span>
+            <div class="total-value" id="valTotalGeneral">R$ 0,00</div>
+            <div class="progress-wrap">
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar"></div>
+              </div>
+              <span class="progress-text" id="progressText">0 de 23 itens no carrinho</span>
+            </div>
+          </div>
+
+          <div class="split-mode-pill" id="splitModePill" title="Clique para alternar o modo de divisão">
+            <span id="splitModeLabel">Divisão: 50% / 50%</span>
+            <span class="split-mode-switch">⇄</span>
+          </div>
+        </div>
+
+        <div class="split-cards-row">
+          <!-- Card Usuário 1 -->
+          <div class="user-split-card user1-card">
+            <div class="user-info">
+              <span class="user-avatar user1-avatar" id="avatarUser1">L</span>
+              <span class="user-name" id="nameDisplayUser1">Lucas</span>
+            </div>
+            <div class="user-amount" id="valUser1">R$ 0,00</div>
+            <span class="user-share-sub" id="subUser1">50% do total</span>
+          </div>
+
+          <div class="split-divider">
+            <span class="divider-icon">+</span>
+          </div>
+
+          <!-- Card Usuário 2 -->
+          <div class="user-split-card user2-card">
+            <div class="user-info">
+              <span class="user-avatar user2-avatar" id="avatarUser2">C</span>
+              <span class="user-name" id="nameDisplayUser2">Claudia</span>
+            </div>
+            <div class="user-amount" id="valUser2">R$ 0,00</div>
+            <span class="user-share-sub" id="subUser2">50% do total</span>
+          </div>
+        </div>
+
+        <!-- Acerto de Contas / Quem Paga no Caixa -->
+        <div class="settlement-bar" id="settlementBar">
+          <span class="settlement-icon">💳</span>
+          <span id="settlementText">Marque os preços dos itens no carrinho para ver a divisão.</span>
+        </div>
+      </section>
+
+      <!-- Barra de Filtros e Busca -->
+      <div class="controls-toolbar">
+        <div class="search-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Buscar item (ex: arroz, feijão)..." autocomplete="off">
+          <button id="btnClearSearch" class="btn-clear-search hidden">&times;</button>
+        </div>
+
+        <div class="filter-toggles">
+          <button id="btnFilterPending" class="chip-filter" data-filter="pending">
+            <span>🛒</span> Só Pendentes
+          </button>
+          <button id="btnExpandAll" class="chip-filter secondary" title="Expandir ou recolher todos os setores">
+            <span>↕</span> Alternar Setores
+          </button>
+        </div>
+      </div>
+
+      <!-- Carrossel de Setores para Navegação Rápida -->
+      <nav class="sector-tabs" id="sectorTabs">
+        <button class="sector-tab active" data-sector="all">Todos</button>
+        <button class="sector-tab" data-sector="hortifruti">🥬 Hortifrúti</button>
+        <button class="sector-tab" data-sector="padaria">🥖 Padaria</button>
+        <button class="sector-tab" data-sector="frios">🧀 Frios</button>
+        <button class="sector-tab" data-sector="mercearia">🥫 Mercearia</button>
+        <button class="sector-tab" data-sector="limpeza">🧹 Limpeza</button>
+        <button class="sector-tab" data-sector="utilidades">📦 Utilidades</button>
+      </nav>
+    </header>
+
+    <!-- Adicionar Novo Item Rápido -->
+    <div class="quick-add-container">
+      <form id="quickAddForm" class="quick-add-form">
+        <input type="text" id="newItemName" placeholder="+ Adicionar novo item..." required autocomplete="off">
+        <select id="newItemSector">
+          <option value="hortifruti">🥬 Hortifrúti</option>
+          <option value="padaria">🥖 Padaria</option>
+          <option value="frios">🧀 Frios</option>
+          <option value="mercearia" selected>🥫 Mercearia</option>
+          <option value="limpeza">🧹 Limpeza</option>
+          <option value="utilidades">📦 Utilidades</option>
+        </select>
+        <button type="submit" class="btn-add" title="Adicionar item à lista">Adicionar</button>
+      </form>
+    </div>
+
+    <!-- Lista de Itens por Setor -->
+    <main class="items-main" id="itemsContainer">
+      <!-- Inserido dinamicamente via app.js -->
+    </main>
+
+    <!-- Floating Actions / Sticky Footer -->
+    <footer class="bottom-bar">
+      <div class="bottom-summary">
+        <div class="bottom-total-col">
+          <span class="sub-label">Total Marcado</span>
+          <span class="bottom-val" id="bottomValTotal">R$ 0,00</span>
+        </div>
+        <div class="bottom-users-col">
+          <span class="user-pill u1"><strong id="bottomU1Name">Lucas:</strong> <span id="bottomValU1">R$ 0,00</span></span>
+          <span class="user-pill u2"><strong id="bottomU2Name">Claudia:</strong> <span id="bottomValU2">R$ 0,00</span></span>
+        </div>
+      </div>
+      <button id="btnScrollTop" class="btn-fab" title="Voltar ao topo">↑</button>
+    </footer>
+
+    <!-- MODAL: Configurações & Sincronização em Tempo Real -->
+    <div class="modal-backdrop" id="settingsModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2>⚙️ Sincronização & Pessoas</h2>
+          <button class="btn-close-modal" id="btnCloseSettings">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Configuração dos Nomes dos Usuários -->
+          <div class="config-section">
+            <label class="section-title">👥 Quem está usando a página?</label>
+            <div class="name-inputs-row">
+              <div class="input-group">
+                <label for="inputUser1">Pessoa 1</label>
+                <input type="text" id="inputUser1" value="Lucas" placeholder="Nome">
+              </div>
+              <div class="input-group">
+                <label for="inputUser2">Pessoa 2</label>
+                <input type="text" id="inputUser2" value="Claudia" placeholder="Nome">
+              </div>
+            </div>
+            
+            <div class="input-group mt-2">
+              <label>Eu sou:</label>
+              <div class="radio-inline">
+                <label class="radio-label">
+                  <input type="radio" name="currentIdentity" value="user1" checked>
+                  <span id="radioLabelUser1">Lucas</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="currentIdentity" value="user2">
+                  <span id="radioLabelUser2">Claudia</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modo de Cálculo da Divisão -->
+          <div class="config-section">
+            <label class="section-title">⚖️ Como dividir a conta?</label>
+            <div class="calc-options">
+              <label class="radio-card">
+                <input type="radio" name="splitSetting" value="equal" checked>
+                <div>
+                  <strong>Dividir Igualmente (50% / 50%)</strong>
+                  <p>Divide o total da compra exatamente pela metade para cada pessoa.</p>
+                </div>
+              </label>
+
+              <label class="radio-card">
+                <input type="radio" name="splitSetting" value="proportional">
+                <div>
+                  <strong>Divisão por Itens Atribuídos</strong>
+                  <p>Cada pessoa paga seus itens exclusivos + 50% dos itens compartilhados.</p>
+                </div>
+              </label>
+            </div>
+
+            <div class="checkbox-option mt-2">
+              <label>
+                <input type="checkbox" id="chkCalcCheckedOnly" checked>
+                <span>Calcular apenas itens marcados no carrinho</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Sincronização em Tempo Real (Firebase) -->
+          <div class="config-section">
+            <label class="section-title">⚡ Sincronização em Tempo Real (Gratuito)</label>
+            <p class="section-desc">
+              Para atualizar em tempo real em 2 celulares diferentes simultaneamente no mercado sem servidor próprio, use o <strong>Firebase Realtime Database</strong> (100% gratuito e rápido).
+            </p>
+
+            <div class="room-input-wrap">
+              <label for="inputRoomId">Nome da Sala / Lista:</label>
+              <input type="text" id="inputRoomId" value="compras-hoje" placeholder="ex: compras-lucas-claudia">
+            </div>
+
+            <div class="firebase-toggle-wrap">
+              <details>
+                <summary>📋 Instruções rápidas do Firebase (2 minutos)</summary>
+                <ol class="steps-list">
+                  <li>Acesse o <a href="https://console.firebase.google.com/" target="_blank" rel="noopener">Firebase Console</a> (grátis com conta Google).</li>
+                  <li>Clique em <strong>Criar Projeto</strong> (ex: "ListaCompras").</li>
+                  <li>Vá em <strong>Criação &gt; Realtime Database</strong> &gt; Criar Banco de Dados (escolha modo de teste para permitir leitura/escrita).</li>
+                  <li>Nas configurações do projeto, adicione um Web App e copie o objeto <code>firebaseConfig</code>.</li>
+                  <li>Cole o código abaixo e clique em <strong>Salvar e Conectar</strong>.</li>
+                </ol>
+              </details>
+            </div>
+
+            <div class="input-group mt-2">
+              <label for="txtFirebaseConfig">Credenciais do Firebase (Cole aqui o JSON ou código de configuração):</label>
+              <textarea id="txtFirebaseConfig" rows="4" placeholder='{ "apiKey": "...", "databaseURL": "https://...", "projectId": "..." }'></textarea>
+            </div>
+
+            <div class="modal-buttons-row">
+              <button id="btnConnectFirebase" class="btn-primary">Salvar & Conectar Tempo Real</button>
+              <button id="btnDisconnectFirebase" class="btn-danger-outline hidden">Desconectar</button>
+            </div>
+          </div>
+
+          <!-- Resetar / Limpar Lista -->
+          <div class="config-section danger-zone">
+            <label class="section-title">🔄 Reiniciar / Limpar</label>
+            <div class="danger-actions">
+              <button id="btnUncheckAll" class="btn-secondary">Desmarcar Todos os Itens</button>
+              <button id="btnResetDefaultList" class="btn-danger-outline">Restaurar Lista Original do WhatsApp</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-primary" id="btnSaveSettings">Concluir</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: Compartilhar com Parceiro(a) -->
+    <div class="modal-backdrop" id="shareModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2>📲 Compartilhar Lista</h2>
+          <button class="btn-close-modal" id="btnCloseShare">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Envie o link abaixo para a outra pessoa. Quando ela abrir, ela verá os mesmos itens e as atualizações em tempo real!</p>
+          
+          <div class="share-link-box">
+            <input type="text" id="shareLinkInput" readonly>
+            <button id="btnCopyShareLink" class="btn-primary">Copiar</button>
+          </div>
+
+          <div class="share-actions-row">
+            <a id="btnShareWhatsApp" class="btn-whatsapp" target="_blank" rel="noopener">
+              <span>💬</span> Enviar pelo WhatsApp
+            </a>
+          </div>
+
+          <div class="sync-tip-box" id="shareTipBox">
+            💡 <strong>Dica:</strong> Se o Firebase estiver configurado, as credenciais e a sala são enviadas no link para a outra pessoa se conectar automaticamente com 1 clique!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Mensagem</div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
