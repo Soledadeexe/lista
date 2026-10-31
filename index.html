@@ -16,128 +16,144 @@
   <!-- CSS -->
   <link rel="stylesheet" href="./style.css">
 
-  <!-- Firebase Compat CDN (Sincronização em tempo real gratuita) -->
+  <!-- Firebase Compat CDN -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
   <div id="app">
-    <!-- Top Header (Oculta suavemente ao rolar para baixo no celular) -->
+    <!-- Top Header (Super compacto & com painel colapsável) -->
     <header class="top-header" id="topHeader">
-      <div class="header-main">
-        <div class="brand">
+      <!-- Barra Superior Sempre Visível (Super Compacta: ~44px) -->
+      <div class="header-slim-bar">
+        <div class="brand-compact">
           <span class="brand-icon">🛒</span>
-          <div>
-            <h1>Lista do Mercado</h1>
-            <p class="brand-subtitle">Tempo real & divisão por pessoa</p>
-          </div>
+          <span class="brand-title">Mercado</span>
+          <button type="button" class="identity-badge-mini" id="miniIdentityBadge" title="Toque para alternar quem está marcando">
+            <span class="mini-avatar" id="miniAvatar">L</span>
+            <span id="miniIdentityName">Lucas</span>
+          </button>
         </div>
 
-        <div class="header-actions">
-          <!-- Alternar Modo Escuro / Claro -->
-          <button id="btnThemeToggle" class="btn-icon" title="Alternar Modo Escuro / Claro">
+        <div class="header-slim-center">
+          <div class="slim-total" id="slimTotalDisplay">R$ 0,00</div>
+        </div>
+
+        <div class="header-slim-actions">
+          <!-- Botão para Expandir/Recolher o Painel Completo -->
+          <button type="button" id="btnToggleHeader" class="btn-toggle-panel" title="Abrir painel de divisão e detalhes">
+            <span>📊 Painel</span>
+            <span class="chevron-icon" id="headerChevron">▼</span>
+          </button>
+
+          <!-- Alternar Tema Escuro / Claro -->
+          <button type="button" id="btnThemeToggle" class="btn-icon-mini" title="Alternar Modo Escuro / Claro">
             <span id="themeIcon">🌙</span>
           </button>
+        </div>
+      </div>
 
-          <!-- Aumentar Texto para Leitura Fácil -->
-          <button id="btnFontToggle" class="btn-font-toggle" title="Aumentar/Diminuir tamanho do texto">
-            <span>A+</span>
-          </button>
-
-          <!-- Status de Sincronização -->
-          <button id="btnSyncStatus" class="status-badge local" title="Clique para configurar sincronização entre 2 pessoas">
+      <!-- Conteúdo Colapsável (Abre apenas ao clicar no botão 'Painel') -->
+      <div class="header-collapsible-drawer collapsed" id="headerCollapsible">
+        <!-- Ações do topo do painel (Sync, A+, Compartilhar, Configurações) -->
+        <div class="drawer-actions-row">
+          <button id="btnSyncStatus" class="status-badge local" title="Status de Sincronização">
             <span class="status-dot"></span>
             <span id="syncStatusText">Modo Local</span>
           </button>
-          
-          <!-- Botão Compartilhar -->
-          <button id="btnShare" class="btn-icon" title="Compartilhar lista com parceiro(a)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="18" cy="5" r="3"></circle>
-              <circle cx="6" cy="12" r="3"></circle>
-              <circle cx="18" cy="19" r="3"></circle>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-            </svg>
-          </button>
 
-          <!-- Botão Configurações -->
-          <button id="btnSettings" class="btn-icon" title="Configurações e Nomes">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-          </button>
+          <div class="drawer-buttons-group">
+            <button id="btnFontToggle" class="btn-font-toggle" title="Aumentar texto">
+              <span>A+</span>
+            </button>
+
+            <button id="btnShare" class="btn-icon" title="Compartilhar lista com parceiro(a)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+            </button>
+
+            <button id="btnSettings" class="btn-icon" title="Configurações e Nomes">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
 
-      <!-- Barra Rápida de Identidade: Quem está usando este celular -->
-      <div class="user-identity-bar">
-        <span class="identity-label">Marcando como:</span>
-        <div class="identity-toggle" id="identityToggle">
-          <button type="button" class="btn-identity u1 active" data-user="user1" id="btnIdentifyU1">
-            <span class="identity-avatar">L</span>
-            <span class="identity-name" id="lblIdentityU1">Lucas</span>
-          </button>
-          <button type="button" class="btn-identity u2" data-user="user2" id="btnIdentifyU2">
-            <span class="identity-avatar">C</span>
-            <span class="identity-name" id="lblIdentityU2">Claudia</span>
-          </button>
+        <!-- Barra Rápida de Identidade: Quem está usando este celular -->
+        <div class="user-identity-bar">
+          <span class="identity-label">Marcando como:</span>
+          <div class="identity-toggle" id="identityToggle">
+            <button type="button" class="btn-identity u1 active" data-user="user1" id="btnIdentifyU1">
+              <span class="identity-avatar">L</span>
+              <span class="identity-name" id="lblIdentityU1">Lucas</span>
+            </button>
+            <button type="button" class="btn-identity u2" data-user="user2" id="btnIdentifyU2">
+              <span class="identity-avatar">C</span>
+              <span class="identity-name" id="lblIdentityU2">Claudia</span>
+            </button>
+          </div>
         </div>
-      </div>
 
-      <!-- Resumo Financeiro / Painel de Divisão -->
-      <section class="financial-summary-card">
-        <div class="summary-top">
-          <div class="total-block">
-            <span class="total-label">Total da Compra</span>
-            <div class="total-value" id="valTotalGeneral">R$ 0,00</div>
-            <div class="progress-wrap">
-              <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progressBar"></div>
+        <!-- Resumo Financeiro / Painel de Divisão -->
+        <section class="financial-summary-card">
+          <div class="summary-top">
+            <div class="total-block">
+              <span class="total-label">Total da Compra</span>
+              <div class="total-value" id="valTotalGeneral">R$ 0,00</div>
+              <div class="progress-wrap">
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+                <span class="progress-text" id="progressText">0 de 23 itens pegos</span>
               </div>
-              <span class="progress-text" id="progressText">0 de 23 itens pegos</span>
+            </div>
+
+            <div class="split-mode-pill" id="splitModePill" title="Alternar entre Divisão 50/50 e Cada um Paga o Seu">
+              <span id="splitModeLabel">Divisão: 50% / 50%</span>
+              <span class="split-mode-switch">⇄</span>
             </div>
           </div>
 
-          <div class="split-mode-pill" id="splitModePill" title="Alternar entre Divisão 50/50 e Cada um Paga o Seu">
-            <span id="splitModeLabel">Divisão: 50% / 50%</span>
-            <span class="split-mode-switch">⇄</span>
-          </div>
-        </div>
-
-        <div class="split-cards-row">
-          <!-- Card Usuário 1 (Lucas) -->
-          <div class="user-split-card user1-card">
-            <div class="user-info">
-              <span class="user-avatar user1-avatar" id="avatarUser1">L</span>
-              <span class="user-name" id="nameDisplayUser1">Lucas</span>
+          <div class="split-cards-row">
+            <!-- Card Usuário 1 (Lucas) -->
+            <div class="user-split-card user1-card">
+              <div class="user-info">
+                <span class="user-avatar user1-avatar" id="avatarUser1">L</span>
+                <span class="user-name" id="nameDisplayUser1">Lucas</span>
+              </div>
+              <div class="user-amount" id="valUser1">R$ 0,00</div>
+              <span class="user-share-sub" id="subUser1">0 itens pegos</span>
             </div>
-            <div class="user-amount" id="valUser1">R$ 0,00</div>
-            <span class="user-share-sub" id="subUser1">0 itens pegos</span>
-          </div>
 
-          <div class="split-divider">
-            <span class="divider-icon">+</span>
-          </div>
-
-          <!-- Card Usuário 2 (Claudia) -->
-          <div class="user-split-card user2-card">
-            <div class="user-info">
-              <span class="user-avatar user2-avatar" id="avatarUser2">C</span>
-              <span class="user-name" id="nameDisplayUser2">Claudia</span>
+            <div class="split-divider">
+              <span class="divider-icon">+</span>
             </div>
-            <div class="user-amount" id="valUser2">R$ 0,00</div>
-            <span class="user-share-sub" id="subUser2">0 itens pegos</span>
-          </div>
-        </div>
 
-        <!-- Acerto de Contas / Pix -->
-        <div class="settlement-bar" id="settlementBar">
-          <span class="settlement-icon">💳</span>
-          <span id="settlementText">Marque a quantidade e valor dos itens que pegar.</span>
-        </div>
-      </section>
+            <!-- Card Usuário 2 (Claudia) -->
+            <div class="user-split-card user2-card">
+              <div class="user-info">
+                <span class="user-avatar user2-avatar" id="avatarUser2">C</span>
+                <span class="user-name" id="nameDisplayUser2">Claudia</span>
+              </div>
+              <div class="user-amount" id="valUser2">R$ 0,00</div>
+              <span class="user-share-sub" id="subUser2">0 itens pegos</span>
+            </div>
+          </div>
+
+          <!-- Acerto de Contas / Pix -->
+          <div class="settlement-bar" id="settlementBar">
+            <span class="settlement-icon">💳</span>
+            <span id="settlementText">Marque a quantidade e valor dos itens que pegar.</span>
+          </div>
+        </section>
+      </div>
 
       <!-- Barra de Filtros e Busca -->
       <div class="controls-toolbar">
@@ -164,6 +180,8 @@
       <nav class="sector-tabs" id="sectorTabs">
         <button class="sector-tab active" data-sector="all">Todos</button>
         <button class="sector-tab" data-sector="hortifruti">🥬 Hortifrúti</button>
+        <button class="sector-tab" data-sector="carnes">🥩 Açougue</button>
+        <button class="sector-tab" data-sector="bebidas">🍺 Bebidas</button>
         <button class="sector-tab" data-sector="padaria">🥖 Padaria</button>
         <button class="sector-tab" data-sector="frios">🧀 Frios</button>
         <button class="sector-tab" data-sector="mercearia">🥫 Mercearia</button>
@@ -172,19 +190,27 @@
       </nav>
     </header>
 
-    <!-- Adicionar Novo Item Rápido -->
+    <!-- Adicionar Novo Item Rápido (Visível no topo com botão na linha de baixo para celular) -->
     <div class="quick-add-container">
       <form id="quickAddForm" class="quick-add-form">
-        <input type="text" id="newItemName" placeholder="+ Adicionar novo item..." required autocomplete="off">
-        <select id="newItemSector">
-          <option value="hortifruti">🥬 Hortifrúti</option>
-          <option value="padaria">🥖 Padaria</option>
-          <option value="frios">🧀 Frios</option>
-          <option value="mercearia" selected>🥫 Mercearia</option>
-          <option value="limpeza">🧹 Limpeza</option>
-          <option value="utilidades">📦 Utilidades</option>
-        </select>
-        <button type="submit" class="btn-add" title="Adicionar item à lista">Adicionar</button>
+        <div class="quick-add-row-top">
+          <input type="text" id="newItemName" placeholder="+ Digite o nome do item a adicionar..." required autocomplete="off">
+        </div>
+        <div class="quick-add-row-bottom">
+          <select id="newItemSector">
+            <option value="hortifruti">🥬 Hortifrúti</option>
+            <option value="carnes">🥩 Açougue</option>
+            <option value="bebidas">🍺 Bebidas</option>
+            <option value="padaria">🥖 Padaria</option>
+            <option value="frios">🧀 Frios</option>
+            <option value="mercearia" selected>🥫 Mercearia</option>
+            <option value="limpeza">🧹 Limpeza</option>
+            <option value="utilidades">📦 Utilidades</option>
+          </select>
+          <button type="submit" class="btn-add" title="Adicionar item à lista">
+            <span>➕ Adicionar</span>
+          </button>
+        </div>
       </form>
     </div>
 
@@ -236,24 +262,12 @@
           <div class="config-section">
             <label class="section-title">⚡ Sincronização em Tempo Real (Gratuito)</label>
             <p class="section-desc">
-              Para atualizar em tempo real em 2 celulares diferentes simultaneamente no mercado sem servidor próprio, use o <strong>Firebase Realtime Database</strong> (gratuito e instantâneo).
+              O Firebase já está pré-configurado no seu projeto! Se precisar alterar a sala ou credenciais, use o campo abaixo:
             </p>
 
             <div class="room-input-wrap">
               <label for="inputRoomId">Nome da Sala / Lista:</label>
               <input type="text" id="inputRoomId" value="compras-hoje" placeholder="ex: compras-lucas-claudia">
-            </div>
-
-            <div class="firebase-toggle-wrap">
-              <details>
-                <summary>📋 Passo a passo do Firebase (2 minutos)</summary>
-                <ol class="steps-list">
-                  <li>Acesse o <a href="https://console.firebase.google.com/" target="_blank" rel="noopener">Firebase Console</a> (grátis com conta Google).</li>
-                  <li>Clique em <strong>Criar Projeto</strong> (ex: "MercadoLista").</li>
-                  <li>Vá em <strong>Criação &gt; Realtime Database</strong> &gt; Criar Banco de Dados (escolha modo de teste para permitir leitura/escrita).</li>
-                  <li>Nas configurações do projeto, copie o objeto <code>firebaseConfig</code> e cole abaixo.</li>
-                </ol>
-              </details>
             </div>
 
             <div class="input-group mt-2">
@@ -305,7 +319,7 @@
           </div>
 
           <div class="sync-tip-box" id="shareTipBox">
-            💡 <strong>Dica:</strong> O link já identifica a outra pessoa automaticamente e conecta à mesma sala em tempo real!
+            💡 <strong>Dica:</strong> O link conecta automaticamente à mesma sala do Firebase em tempo real!
           </div>
         </div>
       </div>

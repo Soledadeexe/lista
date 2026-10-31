@@ -9,43 +9,56 @@
 // ============================================================================
 const DEFAULT_ITEMS = [
   // 🥬 Hortifrúti
-  { id: 'item_1', name: 'Alho', sector: 'hortifruti', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
-  { id: 'item_2', name: 'Cebolinha verde', sector: 'hortifruti', quantity: 1, unit: 'maço', price: 0, checked: false, pickedBy: null },
-  { id: 'item_3', name: 'Limão', sector: 'hortifruti', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
-  { id: 'item_4', name: 'Tomate', sector: 'hortifruti', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
+  { id: 'item_1', name: 'Abacaxi', sector: 'hortifruti', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
+  { id: 'item_2', name: 'Alho', sector: 'hortifruti', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
+  { id: 'item_3', name: 'Banana Prata', sector: 'hortifruti', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
+  { id: 'item_4', name: 'Cebolinha verde', sector: 'hortifruti', quantity: 1, unit: 'maço', price: 0, checked: false, pickedBy: null },
+  { id: 'item_5', name: 'Limão', sector: 'hortifruti', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
+  { id: 'item_6', name: 'Tomate', sector: 'hortifruti', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
+
+  // 🥩 Açougue & Carnes
+  { id: 'item_7', name: 'Carne para Churrasco', sector: 'carnes', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
+
+  // 🍺 Bebidas
+  { id: 'item_8', name: 'Bebida para o Churrasco', sector: 'bebidas', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
 
   // 🥖 Padaria
-  { id: 'item_5', name: 'Pão', sector: 'padaria', quantity: 1, unit: 'pct', price: 0, checked: false, pickedBy: null },
+  { id: 'item_9', name: 'Pão', sector: 'padaria', quantity: 1, unit: 'pct', price: 0, checked: false, pickedBy: null },
 
   // 🧀 Frios e Laticínios
-  { id: 'item_6', name: 'Margarina', sector: 'frios', quantity: 1, unit: 'pote', price: 0, checked: false, pickedBy: null },
-  { id: 'item_7', name: 'Mussarela', sector: 'frios', quantity: 1, unit: 'bandeja', price: 0, checked: false, pickedBy: null },
-  { id: 'item_8', name: 'Requeijão', sector: 'frios', quantity: 1, unit: 'copo', price: 0, checked: false, pickedBy: null },
+  { id: 'item_10', name: 'Margarina', sector: 'frios', quantity: 1, unit: 'pote', price: 0, checked: false, pickedBy: null },
+  { id: 'item_11', name: 'Mussarela', sector: 'frios', quantity: 1, unit: 'bandeja', price: 0, checked: false, pickedBy: null },
+  { id: 'item_12', name: 'Requeijão', sector: 'frios', quantity: 1, unit: 'copo', price: 0, checked: false, pickedBy: null },
 
   // 🥫 Mercearia & Despensa
-  { id: 'item_9', name: 'Açúcar demerara', sector: 'mercearia', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
-  { id: 'item_10', name: 'Azeite', sector: 'mercearia', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
-  { id: 'item_11', name: 'Chocolate em pó', sector: 'mercearia', quantity: 1, unit: 'lata', price: 0, checked: false, pickedBy: null },
-  { id: 'item_12', name: 'Farelo de aveia', sector: 'mercearia', quantity: 1, unit: 'pct', price: 0, checked: false, pickedBy: null },
-  { id: 'item_13', name: 'Feijão', sector: 'mercearia', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
-  { id: 'item_14', name: 'Fubá', sector: 'mercearia', quantity: 1, unit: 'pct', price: 0, checked: false, pickedBy: null },
-  { id: 'item_15', name: 'Nescau', sector: 'mercearia', quantity: 1, unit: 'lata', price: 0, checked: false, pickedBy: null },
-  { id: 'item_16', name: 'Sal', sector: 'mercearia', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
-  { id: 'item_17', name: 'Vinagre', sector: 'mercearia', quantity: 1, unit: 'frasco', price: 0, checked: false, pickedBy: null },
+  { id: 'item_13', name: 'Açúcar demerara', sector: 'mercearia', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
+  { id: 'item_14', name: 'Azeite', sector: 'mercearia', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
+  { id: 'item_15', name: 'Bolacha agua e Sal', sector: 'mercearia', quantity: 1, unit: 'pct', price: 0, checked: false, pickedBy: null },
+  { id: 'item_16', name: 'Chocolate em pó', sector: 'mercearia', quantity: 1, unit: 'lata', price: 0, checked: false, pickedBy: null },
+  { id: 'item_17', name: 'Farelo de aveia', sector: 'mercearia', quantity: 1, unit: 'pct', price: 0, checked: false, pickedBy: null },
+  { id: 'item_18', name: 'Feijão', sector: 'mercearia', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
+  { id: 'item_19', name: 'Fubá', sector: 'mercearia', quantity: 1, unit: 'pct', price: 0, checked: false, pickedBy: null },
+  { id: 'item_20', name: 'Leite Condensado', sector: 'mercearia', quantity: 1, unit: 'lata', price: 0, checked: false, pickedBy: null },
+  { id: 'item_21', name: 'Nescafé', sector: 'mercearia', quantity: 1, unit: 'frasco', price: 0, checked: false, pickedBy: null },
+  { id: 'item_22', name: 'Nescau', sector: 'mercearia', quantity: 1, unit: 'lata', price: 0, checked: false, pickedBy: null },
+  { id: 'item_23', name: 'Sal', sector: 'mercearia', quantity: 1, unit: 'kg', price: 0, checked: false, pickedBy: null },
+  { id: 'item_24', name: 'Vinagre', sector: 'mercearia', quantity: 1, unit: 'frasco', price: 0, checked: false, pickedBy: null },
 
   // 🧹 Limpeza
-  { id: 'item_18', name: 'Água sanitária', sector: 'limpeza', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
-  { id: 'item_19', name: 'Amaciante', sector: 'limpeza', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
-  { id: 'item_20', name: 'Detergente', sector: 'limpeza', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
+  { id: 'item_25', name: 'Água sanitária', sector: 'limpeza', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
+  { id: 'item_26', name: 'Amaciante', sector: 'limpeza', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
+  { id: 'item_27', name: 'Detergente', sector: 'limpeza', quantity: 1, unit: 'un', price: 0, checked: false, pickedBy: null },
 
   // 📦 Utilidades e Descartáveis
-  { id: 'item_21', name: 'Papel manteiga', sector: 'utilidades', quantity: 1, unit: 'rolo', price: 0, checked: false, pickedBy: null },
-  { id: 'item_22', name: 'Saco de lixo para pia', sector: 'utilidades', quantity: 1, unit: 'pct', price: 0, checked: false, pickedBy: null },
-  { id: 'item_23', name: 'Saco de Lixo', sector: 'utilidades', quantity: 1, unit: 'pct', price: 0, checked: false, pickedBy: null }
+  { id: 'item_28', name: 'Papel manteiga', sector: 'utilidades', quantity: 1, unit: 'rolo', price: 0, checked: false, pickedBy: null },
+  { id: 'item_29', name: 'Saco de lixo para pia', sector: 'utilidades', quantity: 1, unit: 'pct', price: 0, checked: false, pickedBy: null },
+  { id: 'item_30', name: 'Saco de Lixo', sector: 'utilidades', quantity: 1, unit: 'pct', price: 0, checked: false, pickedBy: null }
 ];
 
 const SECTOR_INFO = {
   hortifruti: { name: 'Hortifrúti', icon: '🥬', color: '#10b981' },
+  carnes: { name: 'Açougue & Carnes', icon: '🥩', color: '#ef4444' },
+  bebidas: { name: 'Bebidas', icon: '🍺', color: '#f97316' },
   padaria: { name: 'Padaria & Pães', icon: '🥖', color: '#f59e0b' },
   frios: { name: 'Laticínios & Frios', icon: '🧀', color: '#eab308' },
   mercearia: { name: 'Mercearia & Despensa', icon: '🥫', color: '#6366f1' },
@@ -172,7 +185,10 @@ function loadLocalState() {
       state.splitMode = parsed.splitMode || 'equal';
       state.roomId = parsed.roomId || 'compras-hoje';
       if (Array.isArray(parsed.items) && parsed.items.length > 0) {
-        state.items = parsed.items;
+        // Preserva os dados locais (preços e checks) e adiciona novos itens adicionados à Lista.txt
+        const existingNames = new Set(parsed.items.map(i => i.name.toLowerCase().trim()));
+        const newItemsToAdd = DEFAULT_ITEMS.filter(di => !existingNames.has(di.name.toLowerCase().trim()));
+        state.items = [...parsed.items, ...newItemsToAdd];
       }
     } catch (e) {
       console.error('Erro ao ler estado do localStorage:', e);
@@ -249,8 +265,14 @@ function handleIncomingState(incoming) {
 
   isRemoteUpdating = true;
 
+  let hasNewDefaultItems = false;
   if (Array.isArray(incoming.items)) {
-    state.items = incoming.items;
+    const existingNames = new Set(incoming.items.map(i => i.name.toLowerCase().trim()));
+    const newItemsToAdd = DEFAULT_ITEMS.filter(di => !existingNames.has(di.name.toLowerCase().trim()));
+    state.items = [...incoming.items, ...newItemsToAdd];
+    if (newItemsToAdd.length > 0) {
+      hasNewDefaultItems = true;
+    }
   }
   if (incoming.user1) state.user1 = incoming.user1;
   if (incoming.user2) state.user2 = incoming.user2;
@@ -260,6 +282,13 @@ function handleIncomingState(incoming) {
   renderApp();
   showToast('🔄 Lista atualizada em tempo real!');
   isRemoteUpdating = false;
+
+  // Se encontrou itens novos da Lista.txt que não estavam no Firebase, sincroniza para a nuvem
+  if (hasNewDefaultItems && firebaseDbRef) {
+    setTimeout(() => {
+      broadcastLocalUpdate();
+    }, 400);
+  }
 }
 
 // Conexão com Firebase Realtime Database
@@ -474,17 +503,35 @@ function updateIdentityButtons() {
   const lblU1 = document.getElementById('lblIdentityU1');
   const lblU2 = document.getElementById('lblIdentityU2');
 
+  const miniAvatar = document.getElementById('miniAvatar');
+  const miniName = document.getElementById('miniIdentityName');
+  const miniBadge = document.getElementById('miniIdentityBadge');
+
   if (lblU1) lblU1.textContent = state.user1;
   if (lblU2) lblU2.textContent = state.user2;
 
+  const isU1 = state.currentUserId === 'user1';
+
   if (btnU1 && btnU2) {
-    btnU1.classList.toggle('active', state.currentUserId === 'user1');
-    btnU2.classList.toggle('active', state.currentUserId === 'user2');
+    btnU1.classList.toggle('active', isU1);
+    btnU2.classList.toggle('active', !isU1);
+  }
+
+  if (miniBadge && miniAvatar && miniName) {
+    miniBadge.className = 'identity-badge-mini ' + (isU1 ? 'u1' : 'u2');
+    miniAvatar.textContent = (isU1 ? state.user1 : state.user2).charAt(0).toUpperCase();
+    miniName.textContent = isU1 ? state.user1 : state.user2;
   }
 }
 
 function renderSummary() {
   const totals = calculateTotals();
+
+  // Top Slim Bar Total
+  const slimTotalDisplay = document.getElementById('slimTotalDisplay');
+  if (slimTotalDisplay) {
+    slimTotalDisplay.textContent = formatCurrency(totals.totalGeneral);
+  }
 
   // Top Card
   document.getElementById('valTotalGeneral').textContent = formatCurrency(totals.totalGeneral);
@@ -709,6 +756,28 @@ function renderItemRowHtml(item) {
 // EVENT LISTENERS & AÇÕES DO USUÁRIO
 // ============================================================================
 function setupEventListeners() {
+  // Botão para Expandir / Recolher o Painel Superior (libera espaço no celular)
+  const btnToggleHeader = document.getElementById('btnToggleHeader');
+  const headerCollapsible = document.getElementById('headerCollapsible');
+
+  if (btnToggleHeader && headerCollapsible) {
+    btnToggleHeader.addEventListener('click', () => {
+      const isNowCollapsed = headerCollapsible.classList.toggle('collapsed');
+      btnToggleHeader.classList.toggle('open', !isNowCollapsed);
+    });
+  }
+
+  // Toque rápido no mini-badge para alternar comprador sem precisar abrir o painel
+  const miniIdentityBadge = document.getElementById('miniIdentityBadge');
+  if (miniIdentityBadge) {
+    miniIdentityBadge.addEventListener('click', () => {
+      state.currentUserId = state.currentUserId === 'user1' ? 'user2' : 'user1';
+      updateIdentityButtons();
+      saveLocalState();
+      showToast(`👤 Marcando como: ${state.currentUserId === 'user1' ? state.user1 : state.user2}`);
+    });
+  }
+
   // Alternar Modo Escuro / Claro
   const btnThemeToggle = document.getElementById('btnThemeToggle');
   if (btnThemeToggle) {
@@ -1144,11 +1213,11 @@ function setupModalEvents() {
 
   // Restaurar lista padrão
   document.getElementById('btnResetDefaultList').addEventListener('click', () => {
-    if (confirm('Restaurar a lista original de 23 itens do WhatsApp?')) {
+    if (confirm('Restaurar a lista com todos os 30 itens atualizados do WhatsApp?')) {
       state.items = JSON.parse(JSON.stringify(DEFAULT_ITEMS));
       broadcastLocalUpdate();
       renderApp();
-      showToast('Lista original restaurada!');
+      showToast('Lista de 30 itens restaurada!');
     }
   });
 
